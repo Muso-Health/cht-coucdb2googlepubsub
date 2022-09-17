@@ -4,9 +4,9 @@ from datetime import datetime
 class BatchInfo:
     def __init__(self,
                  batch_id: int,
-                 start: datetime,
+                 start_at: datetime,
                  pending: int,
-                 end: datetime = None,
+                 end_at: datetime = None,
                  received: int = 0,
                  received_forms: int = 0,
                  validated_forms: int = 0,
@@ -17,9 +17,9 @@ class BatchInfo:
                  instance: str = 'mali-prod'
                  ):
         self.batch_id = batch_id
-        self.start = start
+        self.start_at = start_at
         self.pending = pending
-        self.end = end
+        self.end_at = end_at
         self.received = received
         self.received_forms = received_forms
         self.validated_forms = validated_forms
