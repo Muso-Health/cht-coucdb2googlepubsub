@@ -15,8 +15,8 @@ class BatchStat(Base):
 
     batch_id = Column(Integer)
     instance = Column(String)
-    start = Column(TIMESTAMP)
-    end = Column(TIMESTAMP)
+    start_at = Column(TIMESTAMP)
+    end_at = Column(TIMESTAMP)
     received = Column(Integer)
     received_forms = Column(Integer)
     validated_forms = Column(Integer)
@@ -33,8 +33,8 @@ class BatchStat(Base):
         super().__init__(*args, **kwargs)
         self.batch_id = batch_info.batch_id
         self.instance = batch_info.instance
-        self.start = batch_info.start
-        self.end = batch_info.end
+        self.start_at = batch_info.start_at
+        self.end_at = batch_info.end_at
         self.received = batch_info.received
         self.received_forms = batch_info.received_forms
         self.validated_forms = batch_info.validated_forms
