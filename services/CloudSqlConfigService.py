@@ -22,7 +22,7 @@ class CloudSqlConfigService(ConfigService):
             cloud_config = session.query(CloudConfig).get(1)
             if cloud_config is None:
                 return False
-
+            print(f"url = {cloud_config.url}")
             CloudSqlConfigService.config.flattening = cloud_config.flattening
             CloudSqlConfigService.config.url = cloud_config.url
             CloudSqlConfigService.config.domain = cloud_config.domain

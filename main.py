@@ -35,7 +35,8 @@ def start_loop():
     if not config_service.init():
         print('Error: Unable to get config from cloud SQL')
         exit(2)
-
+    else:
+        print("I've the Config")
     print(ConfigModule.config_to_string())
 
     stat_service = CloudSqlStatService(db)

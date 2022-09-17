@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any
 
 from sqlalchemy import Column, Integer, String, TIMESTAMP
@@ -27,19 +28,30 @@ class BatchStat(Base):
     end_seq = Column(String)
 
     def __init__(self,
-                 batch_info: BatchInfo,
+                 batch_id: int,
+                 instance: str,
+                 start_at: datetime,
+                 end_at: datetime,
+                 received: int,
+                 received_forms: int,
+                 validated_forms: int,
+                 malformed_forms: int,
+                 flatten_forms: int,
+                 pending: int,
+                 start_seq: str,
+                 end_seq: str,
                  *args: Any, **kwargs: Any
                  ):
         super().__init__(*args, **kwargs)
-        self.batch_id = batch_info.batch_id
-        self.instance = batch_info.instance
-        self.start_at = batch_info.start_at
-        self.end_at = batch_info.end_at
-        self.received = batch_info.received
-        self.received_forms = batch_info.received_forms
-        self.validated_forms = batch_info.validated_forms
-        self.malformed_forms = batch_info.malformed_forms
-        self.flatten_forms = batch_info.flatten_forms
-        self.uniques_id = batch_info.pending
-        self.start_seq = batch_info.start_seq
-        self.end_seq = batch_info.end_seq
+        self.batch_id = batch_id
+        self.instance = instance
+        self.start_at = start_at
+        self.end_at = end_at
+        self.received = received
+        self.received_forms = received_forms
+        self.validated_forms = validated_forms
+        self.malformed_forms = malformed_forms
+        self.flatten_forms = flatten_forms
+        self.pending = pending
+        self.start_seq = start_seq
+        self.end_seq = end_seq

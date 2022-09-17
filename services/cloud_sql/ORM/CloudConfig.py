@@ -26,18 +26,28 @@ class CloudConfig(Base):
     country_code = Column(String)
 
     def __init__(self,
-                 config: Config,
+                 flattening: bool,
+                 url: str,
+                 domain: str,
+                 protocol: str,
+                 batch_size: str,
+                 last_couchdb_sequence: str,
+                 sleep_seconds: str,
+                 couchdb_user_secret: str,
+                 couchdb_password_secret: str,
+                 instance_type: str,
+                 country_code: str,
                  *args: Any, **kwargs: Any
                  ):
         super().__init__(*args, **kwargs)
-        self.flattening = config.flattening
-        self.url = config.url
-        self.domain = config.domain,
-        self.protocol = config.protocol,
-        self.batch_size = config.batch_size
-        self.last_couchdb_sequence = config.last_couchdb_sequence
-        self.sleep_seconds = config.sleep_seconds
-        self.couchdb_user_secret = config.couchdb_user_secret
-        self.couchdb_password_secret = config.couchdb_password_secret,
-        self.instance_type = config.instance_type,
-        self.country_code = config.country_code
+        self.flattening = flattening
+        self.url = url
+        self.domain = domain,
+        self.protocol = protocol,
+        self.batch_size = batch_size
+        self.last_couchdb_sequence = last_couchdb_sequence
+        self.sleep_seconds = sleep_seconds
+        self.couchdb_user_secret = couchdb_user_secret
+        self.couchdb_password_secret = couchdb_password_secret,
+        self.instance_type = instance_type,
+        self.country_code = country_code
