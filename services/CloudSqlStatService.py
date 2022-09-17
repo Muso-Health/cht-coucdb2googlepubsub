@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from contracts.StatService import StatService
 from services.cloud_sql.ORM.BatchStat import BatchStat
-from models import BatchInfo
+from models.BatchInfo import BatchInfo
 
 
 class CloudSqlStatService(StatService):
@@ -13,7 +13,21 @@ class CloudSqlStatService(StatService):
     def publish_batch_stat(self, info: BatchInfo):
         if self.db is not None:
             session = Session(self.db)
-            session.add(BatchStat(info))
+            stat = BatchStat(
+                batch_id=info.batch_id,
+                instance=info.instance,
+                start_at=info.start_at,
+                end_at=info.end_at,
+                received=info.received,
+                received_forms=info.received_forms,
+                validated_forms=info.validated_forms,
+                malformed_forms=info.malformed_forms,
+                flatten_forms=info.flatten_forms,
+                pending=info.pending,
+                start_seq=info.start_seq,
+                end_seq=info.end_seq
+            )
+            session.add(stat)
             session.commit()
             session.close()
 
