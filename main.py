@@ -56,10 +56,7 @@ def start_loop():
     while batch_id < 1:
         batch_id = batch_id + 1
         print(f"batch {batch_id}")
-        data = couchdb_changes_service.get_batch(
-            couchdb_request,
-            couchdb_auth
-        )
+        data = couchdb_changes_service.get_batch()
         batch_info = BatchInfo(
             batch_id=batch_id,
             start_at=datetime.now(),
