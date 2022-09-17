@@ -80,7 +80,7 @@ def start_loop():
                             pub_sub_topic = pub_sub_service.get_topic_from_data(doc)
                             if pub_sub_topic != '':
                                 form_to_send = doc
-                                if config_service.config.flattening:
+                                if Config.flattening:
                                     flat_data_record = data_record.flatten(doc)
                                     if flat_data_record is not None and flat_data_record != {}:
                                         batch_info.flatten_forms = batch_info.flatten_forms + 1

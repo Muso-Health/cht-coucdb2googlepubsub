@@ -7,7 +7,6 @@ from services.cloud_sql.ORM.CloudConfig import CloudConfig
 
 
 class CloudSqlConfigService(ConfigService):
-    config: Config = Config()
 
     def __init__(self, db):
         self.db = db
@@ -23,16 +22,16 @@ class CloudSqlConfigService(ConfigService):
             if cloud_config is None:
                 return False
             print(f"url = {cloud_config.url}")
-            CloudSqlConfigService.config.flattening = cloud_config.flattening
-            CloudSqlConfigService.config.url = cloud_config.url
-            CloudSqlConfigService.config.domain = cloud_config.domain
-            CloudSqlConfigService.config.batch_size = cloud_config.batch_size
-            CloudSqlConfigService.config.last_couchdb_sequence = cloud_config.last_couchdb_sequence
-            CloudSqlConfigService.config.sleep_seconds = cloud_config.sleep_seconds
-            CloudSqlConfigService.config.couchdb_user_secret = cloud_config.couchdb_user_secret
-            CloudSqlConfigService.config.couchdb_password_secret = cloud_config.couchdb_password_secret
-            CloudSqlConfigService.config.instance_type = cloud_config.instance_type
-            CloudSqlConfigService.config.country_code = cloud_config.country_code
+            Config.flattening = cloud_config.flattening
+            Config.url = cloud_config.url
+            Config.domain = cloud_config.domain
+            Config.batch_size = cloud_config.batch_size
+            Config.last_couchdb_sequence = cloud_config.last_couchdb_sequence
+            Config.sleep_seconds = cloud_config.sleep_seconds
+            Config.couchdb_user_secret = cloud_config.couchdb_user_secret
+            Config.couchdb_password_secret = cloud_config.couchdb_password_secret
+            Config.instance_type = cloud_config.instance_type
+            Config.country_code = cloud_config.country_code
             return True
 
     def update(self):
@@ -41,5 +40,5 @@ class CloudSqlConfigService(ConfigService):
             session.execute(
                 update(CloudConfig).
                 where(CloudConfig.id == 1).
-                values(last_couchdb_sequence=CloudSqlConfigService.config.last_couchdb_sequence)
+                values(last_couchdb_sequence=Config.last_couchdb_sequence)
             )
