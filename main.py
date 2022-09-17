@@ -36,6 +36,8 @@ def start_loop():
         print('Error: Unable to get config from cloud SQL')
         exit(2)
 
+    print(ConfigModule.config_to_string())
+
     stat_service = CloudSqlStatService(db)
 
     couchdb_changes_service = CouchDBPythonService()
