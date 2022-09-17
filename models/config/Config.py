@@ -1,0 +1,12 @@
+class Config:
+    url: str
+    protocol: str
+    domain: str
+    country_code: str
+    instance_type: str
+    couchdb_user_secret: str
+    couchdb_password_secret: str
+    last_couchdb_sequence: str
+    sleep_seconds: int
+    batch_size: int
+    flattening: bool
