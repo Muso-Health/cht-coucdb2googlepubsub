@@ -5,7 +5,8 @@ from datetime import datetime
 from google.cloud import secretmanager
 from flask import Flask
 
-from models.config import Config
+from models.config import Config as ConfigModule
+from models.config.Config import Config
 from services.DataRecordFlatteningService import DataRecordFlatteningService
 from services.PersonMarshMallowService import PersonMarshMallowService
 from services.PlaceMarshMallowService import PlaceMarshMallowService
@@ -48,7 +49,7 @@ def start_loop():
 
     couchdb_auth = CouchdbAuth(client)
 
-    print(Config.config_to_string())
+    print(ConfigModule.config_to_string())
     exit(0)
     batch_id = 0
     while True:
@@ -99,12 +100,12 @@ def start_loop():
             stat_service.db = connect_to_cloud_server(client)
             config_service.db = stat_service.db
         stat_service.publish_batch_stat(batch_info)
-        config_service.config.last_couchdb_sequence = data.last_sequence_number
+        Config.last_couchdb_sequence = data.last_sequence_number
         config_service.store_sequence()
 
         # init next batch
         couchdb_request = CouchdbRequest()
-        time.sleep(config_service.config.sleep_seconds)
+        time.sleep(Config.sleep_seconds)
 
 
 if __name__ == "__main__":
