@@ -41,5 +41,5 @@ class CloudSqlConfigService(ConfigService):
             session.execute(
                 update(CloudConfig).
                 where(CloudConfig.id == 1).
-                values(last_couchdb_sequence=self.config.last_couchdb_sequence)
+                values(last_couchdb_sequence=CloudSqlConfigService.config.last_couchdb_sequence)
             )
