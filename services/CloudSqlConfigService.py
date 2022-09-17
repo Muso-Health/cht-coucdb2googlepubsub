@@ -7,7 +7,7 @@ from services.cloud_sql.ORM.CloudConfig import CloudConfig
 
 
 class CloudSqlConfigService(ConfigService):
-    config: Config
+    config: Config = Config()
 
     def __init__(self, db):
         self.db = db
@@ -23,16 +23,16 @@ class CloudSqlConfigService(ConfigService):
             if cloud_config is None:
                 return False
 
-            self.config.flattening = cloud_config.flattening
-            self.config.url = cloud_config.url
-            self.config.domain = cloud_config.domain
-            self.config.batch_size = cloud_config.batch_size
-            self.config.last_couchdb_sequence = cloud_config.last_couchdb_sequence
-            self.config.sleep_seconds = cloud_config.sleep_seconds
-            self.config.couchdb_user_secret = cloud_config.couchdb_user_secret
-            self.config.couchdb_password_secret = cloud_config.couchdb_password_secret
-            self.config.instance_type = cloud_config.instance_type
-            self.config.country_code = cloud_config.country_code
+            CloudSqlConfigService.config.flattening = cloud_config.flattening
+            CloudSqlConfigService.config.url = cloud_config.url
+            CloudSqlConfigService.config.domain = cloud_config.domain
+            CloudSqlConfigService.config.batch_size = cloud_config.batch_size
+            CloudSqlConfigService.config.last_couchdb_sequence = cloud_config.last_couchdb_sequence
+            CloudSqlConfigService.config.sleep_seconds = cloud_config.sleep_seconds
+            CloudSqlConfigService.config.couchdb_user_secret = cloud_config.couchdb_user_secret
+            CloudSqlConfigService.config.couchdb_password_secret = cloud_config.couchdb_password_secret
+            CloudSqlConfigService.config.instance_type = cloud_config.instance_type
+            CloudSqlConfigService.config.country_code = cloud_config.country_code
             return True
 
     def update(self):
