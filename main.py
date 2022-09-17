@@ -44,7 +44,7 @@ def start_loop():
     flattening_service = DataRecordFlatteningService()
     person_schema_service = PersonMarshMallowService()
     place_schema_service = PlaceMarshMallowService()
-
+    print('hola  feliz navidad')
     couchdb_request = CouchdbRequest()
 
     couchdb_auth = CouchdbAuth(client)

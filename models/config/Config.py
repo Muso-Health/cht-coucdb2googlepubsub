@@ -15,15 +15,15 @@ def config_to_string():
 
 
 class Config:
-    url: str
-    protocol: str
-    domain: str
-    country_code: str
-    instance_type: str
-    last_couchdb_sequence: str
-    sleep_seconds: int
-    batch_size: int
-    flattening: bool
-    couchdb_user_secret: str
-    couchdb_password_secret: str
+    url: str = ''
+    protocol: str = ''
+    domain: str = ''
+    country_code: str = ''
+    instance_type: str = ''
+    last_couchdb_sequence: str = ''
+    sleep_seconds: int = 120
+    batch_size: int = 12500
+    flattening: bool = False
+    couchdb_user_secret: str = ''
+    couchdb_password_secret: str = ''
 
