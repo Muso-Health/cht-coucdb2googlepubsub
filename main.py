@@ -5,6 +5,7 @@ from datetime import datetime
 from google.cloud import secretmanager
 from flask import Flask
 
+from models.config import Config
 from services.DataRecordFlatteningService import DataRecordFlatteningService
 from services.PersonMarshMallowService import PersonMarshMallowService
 from services.PlaceMarshMallowService import PlaceMarshMallowService
@@ -50,7 +51,8 @@ def start_loop():
         config_service.config.couchdb_user_secret,
         config_service.config.couchdb_password_secret
     )
-
+    print(Config.to_string())
+    exit(0)
     batch_id = 0
     while True:
         batch_id = batch_id + 1

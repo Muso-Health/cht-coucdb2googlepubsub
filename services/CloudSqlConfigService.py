@@ -29,6 +29,10 @@ class CloudSqlConfigService(ConfigService):
             self.config.batch_size = cloud_config.batch_size
             self.config.last_couchdb_sequence = cloud_config.last_couchdb_sequence
             self.config.sleep_seconds = cloud_config.sleep_seconds
+            self.config.couchdb_user_secret = cloud_config.couchdb_user_secret
+            self.config.couchdb_password_secret = cloud_config.couchdb_password_secret
+            self.config.instance_type = cloud_config.instance_type
+            self.config.country_code = cloud_config.country_code
             return True
 
     def update(self):
