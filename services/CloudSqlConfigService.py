@@ -19,7 +19,7 @@ class CloudSqlConfigService(ConfigService):
     def init(self) -> bool:
         if self.db is not None:
             session = Session(self.db)
-            cloud_config = session.get(CloudConfig, 1)
+            cloud_config = session.query(CloudConfig).get(1)
             if cloud_config is None:
                 return False
 

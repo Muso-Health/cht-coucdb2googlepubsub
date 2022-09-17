@@ -1,11 +1,15 @@
 from typing import Any
 
 from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy.ext.declarative import declarative_base
 
 from models.config import Config
 
+# Cloud SQL ORM
+Base = declarative_base()
 
-class CloudConfig:
+
+class CloudConfig(Base):
     __tablename__ = 'configs'
     id = Column(Integer, primary_key=True)
 
