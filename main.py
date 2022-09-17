@@ -44,14 +44,11 @@ def start_loop():
     person_schema_service = PersonMarshMallowService()
     place_schema_service = PlaceMarshMallowService()
 
-    couchdb_request = CouchdbRequest(config_service.config)
+    couchdb_request = CouchdbRequest()
 
-    couchdb_auth = CouchdbAuth(
-        client,
-        config_service.config.couchdb_user_secret,
-        config_service.config.couchdb_password_secret
-    )
-    print(Config.to_string())
+    couchdb_auth = CouchdbAuth(client)
+
+    print(Config.config_to_string())
     exit(0)
     batch_id = 0
     while True:
@@ -106,7 +103,7 @@ def start_loop():
         config_service.store_sequence()
 
         # init next batch
-        couchdb_request = CouchdbRequest(config_service.config)
+        couchdb_request = CouchdbRequest()
         time.sleep(config_service.config.sleep_seconds)
 
 

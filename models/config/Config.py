@@ -1,4 +1,4 @@
-def to_string():
+def config_to_string():
     return f"""
     url: {Config.url},
     protocol: {Config.protocol},
