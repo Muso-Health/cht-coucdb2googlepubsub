@@ -25,6 +25,7 @@ class CloudSqlConfigService(ConfigService):
             Config.flattening = cloud_config.flattening
             Config.url = cloud_config.url
             Config.domain = cloud_config.domain
+            Config.protocol = cloud_config.protocol
             Config.batch_size = cloud_config.batch_size
             Config.last_couchdb_sequence = cloud_config.last_couchdb_sequence
             Config.sleep_seconds = cloud_config.sleep_seconds
