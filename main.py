@@ -3,7 +3,7 @@ import time
 from datetime import datetime
 
 from google.cloud import secretmanager
-from flask import Flask
+from flask import Flask, abort
 
 from models.config import Config as ConfigModule
 from models.config.Config import Config
@@ -26,18 +26,16 @@ app = Flask(__name__)
 
 @app.route("/")
 def start_loop():
+
     client = secretmanager.SecretManagerServiceClient()
     db = connect_to_cloud_server(client)
     if db is None:
         print('error no access to Cloud Sql db')
-        exit(1)
+        abort(500)
     config_service = CloudSqlConfigService(db)
     if not config_service.init():
         print('Error: Unable to get config from cloud SQL')
-        exit(2)
-    else:
-        print("I've the Config")
-    print(ConfigModule.config_to_string())
+        abort(500)
 
     stat_service = CloudSqlStatService(db)
 
@@ -47,16 +45,17 @@ def start_loop():
     flattening_service = DataRecordFlatteningService()
     person_schema_service = PersonMarshMallowService()
     place_schema_service = PlaceMarshMallowService()
-    print('hola  feliz navidad')
+
     couchdb_request = CouchdbRequest()
 
     couchdb_auth = CouchdbAuth(client)
 
     print(ConfigModule.config_to_string())
-    exit(0)
+
     batch_id = 0
-    while True:
+    while batch_id < 1:
         batch_id = batch_id + 1
+        print(f"batch {batch_id}")
         data = couchdb_changes_service.get_batch(
             couchdb_request,
             couchdb_auth
@@ -102,13 +101,19 @@ def start_loop():
         if not stat_service.verify_connexion():
             stat_service.db = connect_to_cloud_server(client)
             config_service.db = stat_service.db
+        print("publishing batch stats")
         stat_service.publish_batch_stat(batch_info)
+        print("batch stats published :=)")
         Config.last_couchdb_sequence = data.last_sequence_number
+        print(f"publishing last seq {data.last_sequence_number}")
         config_service.store_sequence()
+        print("last seq published :=)")
 
         # init next batch
         couchdb_request = CouchdbRequest()
         time.sleep(Config.sleep_seconds)
+
+    return 'ok'
 
 
 if __name__ == "__main__":
