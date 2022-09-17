@@ -60,7 +60,7 @@ def start_loop():
         )
         batch_info = BatchInfo(
             batch_id=batch_id,
-            start=datetime.now(),
+            start_at=datetime.now(),
             start_seq=couchdb_request.since,
             pending=data.pending
         )
@@ -95,7 +95,7 @@ def start_loop():
                             place.dispatch_to_pub_sub('mali-prod-places', doc)
 
         batch_info.end_seq = data.last_sequence_number
-        batch_info.end = datetime.now()
+        batch_info.end_at = datetime.now()
         if not stat_service.verify_connexion():
             stat_service.db = connect_to_cloud_server(client)
             config_service.db = stat_service.db
