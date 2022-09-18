@@ -1,5 +1,4 @@
 import os
-import time
 from datetime import datetime
 
 from google.cloud import secretmanager
@@ -101,10 +100,6 @@ def start_loop():
     print(f"publishing last seq {data.last_sequence_number}")
     config_service.store_sequence()
     print("last seq published :=)")
-
-    # init next batch
-    couchdb_request = CouchdbRequest()
-    time.sleep(Config.sleep_seconds)
 
     return 'ok'
 
