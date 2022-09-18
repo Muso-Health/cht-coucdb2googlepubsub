@@ -5,7 +5,6 @@ from models.config.Config import Config
 
 
 class ConfigService(ABC):
-    config: Config
 
     def store_sequence(self) -> bool:
         pass

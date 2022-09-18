@@ -7,7 +7,6 @@ from services.cloud_sql.ORM.CloudConfig import CloudConfig
 
 
 class CloudSqlConfigService(ConfigService):
-    config: Config
 
     def __init__(self, db):
         self.db = db
@@ -19,16 +18,22 @@ class CloudSqlConfigService(ConfigService):
     def init(self) -> bool:
         if self.db is not None:
             session = Session(self.db)
-            cloud_config = session.get(CloudConfig, 1)
+            cloud_config = session.query(CloudConfig).get(1)
             if cloud_config is None:
                 return False
-
-            self.config.flattening = cloud_config.flattening
-            self.config.url = cloud_config.url
-            self.config.domain = cloud_config.domain
-            self.config.batch_size = cloud_config.batch_size
-            self.config.last_couchdb_sequence = cloud_config.last_couchdb_sequence
-            self.config.sleep_seconds = cloud_config.sleep_seconds
+            print(f"url = {cloud_config.url}")
+            Config.flattening = cloud_config.flattening
+            Config.url = cloud_config.url
+            Config.domain = cloud_config.domain
+            Config.protocol = cloud_config.protocol
+            Config.batch_size = cloud_config.batch_size
+            Config.last_couchdb_sequence = cloud_config.last_couchdb_sequence
+            Config.sleep_seconds = cloud_config.sleep_seconds
+            Config.couchdb_user_secret = cloud_config.couchdb_user_secret
+            Config.couchdb_password_secret = cloud_config.couchdb_password_secret
+            Config.instance_type = cloud_config.instance_type
+            Config.country_code = cloud_config.country_code
+            Config.old_accepted = cloud_config.old_accepted
             return True
 
     def update(self):
@@ -37,5 +42,7 @@ class CloudSqlConfigService(ConfigService):
             session.execute(
                 update(CloudConfig).
                 where(CloudConfig.id == 1).
-                values(last_couchdb_sequence=self.config.last_couchdb_sequence)
+                values(last_couchdb_sequence=Config.last_couchdb_sequence)
             )
+            session.commit()
+

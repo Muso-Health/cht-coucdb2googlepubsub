@@ -8,8 +8,12 @@ from models.couchdb_request.CouchdbResponse import CouchdbResponse
 
 
 class CouchdbChangesRequestService(CouchdbChangesHttpService):
-    def get_batch(self, request_config: CouchdbRequest, auth: CouchdbAuth) -> CouchdbResponse:
-        response = requests.get(request_config.api_url, verify=False, auth=HTTPBasicAuth(auth.username, auth.password))
+    def get_batch(self, options: dict = None) -> CouchdbResponse:
+        response = requests.get(
+            CouchdbRequest.api_url,
+            verify=False,
+            auth=HTTPBasicAuth(CouchdbAuth.username, CouchdbAuth.password)
+        )
         if response.status_code == 200:
             data = response.content
 

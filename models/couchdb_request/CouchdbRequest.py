@@ -9,14 +9,14 @@ class CouchdbRequest:
     limit: int
     api_url: str
 
-    def __init__(self, config: Config):
-        self.protocol = config.protocol
-        self.domain = config.domain
-        self.server_url = f"{config.protocol}://{config.domain}"
-        self.since = config.last_couchdb_sequence
-        self.limit = config.batch_size
-        if self.since is not None:
-            self.api_url = f"{self.server_url}/_changes?include_docssince={self.since}&limit={self.limit}"
+    def __init__(self):
+        CouchdbRequest.protocol = Config.protocol
+        CouchdbRequest.domain = Config.domain
+        CouchdbRequest.server_url = f"{Config.protocol}://{Config.domain}"
+        CouchdbRequest.since = Config.last_couchdb_sequence
+        CouchdbRequest.limit = Config.batch_size
+        if CouchdbRequest.since is not None:
+            CouchdbRequest.api_url = f"{CouchdbRequest.server_url}/_changes?include_docssince={CouchdbRequest.since}&limit={CouchdbRequest.limit}"
         else:
-            self.api_url = f"{self.server_url}/_changes?limit={self.limit}"
+            CouchdbRequest.api_url = f"{CouchdbRequest.server_url}/_changes?limit={CouchdbRequest.limit}"
 

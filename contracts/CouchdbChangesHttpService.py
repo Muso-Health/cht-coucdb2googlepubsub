@@ -6,5 +6,5 @@ from models.couchdb_request.CouchdbResponse import CouchdbResponse
 
 
 class CouchdbChangesHttpService(ABC):
-    def get_batch(self, request_config: CouchdbRequest, auth: CouchdbAuth) -> CouchdbResponse:
+    def get_batch(self, options: dict = None) -> CouchdbResponse:
         pass
