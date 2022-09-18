@@ -26,4 +26,5 @@ class Config:
     flattening: bool = False
     couchdb_user_secret: str = ''
     couchdb_password_secret: str = ''
+    old_accepted: bool = True
 

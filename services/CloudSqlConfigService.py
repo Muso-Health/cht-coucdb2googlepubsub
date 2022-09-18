@@ -33,6 +33,7 @@ class CloudSqlConfigService(ConfigService):
             Config.couchdb_password_secret = cloud_config.couchdb_password_secret
             Config.instance_type = cloud_config.instance_type
             Config.country_code = cloud_config.country_code
+            Config.old_accepted = cloud_config.old_accepted
             return True
 
     def update(self):

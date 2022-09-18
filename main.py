@@ -26,7 +26,6 @@ app = Flask(__name__)
 
 @app.route("/")
 def start_loop():
-
     client = secretmanager.SecretManagerServiceClient()
     db = connect_to_cloud_server(client)
     if db is None:
@@ -52,63 +51,60 @@ def start_loop():
 
     print(ConfigModule.config_to_string())
 
-    batch_id = 0
-    while batch_id < 1:
-        batch_id = batch_id + 1
-        print(f"batch {batch_id}")
-        data = couchdb_changes_service.get_batch()
-        batch_info = BatchInfo(
-            batch_id=batch_id,
-            start_at=datetime.now(),
-            start_seq=couchdb_request.since,
-            pending=data.pending
-        )
-        for result in data.docs:
-            batch_info.received = batch_info.received + 1
-            if "doc" in result:
-                doc = result["doc"]
-                if "type" in doc:
-                    if doc["type"] == 'data_record':
-                        batch_info.received_forms = batch_info.received_forms + 1
-                        data_record = CouchdbDoc(data_record_schema_service, pub_sub_service, flattening_service)
-                        if data_record.is_valid_doc(doc):
-                            batch_info.validated_forms = batch_info.validated_forms + 1
-                            pub_sub_topic = pub_sub_service.get_topic_from_data(doc)
-                            if pub_sub_topic != '':
-                                form_to_send = doc
-                                if Config.flattening:
-                                    flat_data_record = data_record.flatten(doc)
-                                    if flat_data_record is not None and flat_data_record != {}:
-                                        batch_info.flatten_forms = batch_info.flatten_forms + 1
-                                        form_to_send = flat_data_record
-                                message_id = data_record.dispatch_to_pub_sub(pub_sub_topic, form_to_send)
-                        else:
-                            batch_info.malformed_forms = batch_info.malformed_forms + 1
-                    if doc["type"] == 'person':
-                        person = CouchdbDoc(person_schema_service, pub_sub_service)
-                        if person.is_valid_doc(doc):
-                            person.dispatch_to_pub_sub('mali-prod-persons', doc)
-                    if "contact_type" in doc and doc["type"] == "contact":
-                        place = CouchdbDoc(place_schema_service, pub_sub_service)
-                        if place.is_valid_doc(doc):
-                            place.dispatch_to_pub_sub('mali-prod-places', doc)
+    batch_id = 1
+    data = couchdb_changes_service.get_batch()
+    batch_info = BatchInfo(
+        batch_id=batch_id,
+        start_at=datetime.now(),
+        start_seq=couchdb_request.since,
+        pending=data.pending
+    )
+    for result in data.docs:
+        batch_info.received = batch_info.received + 1
+        if "doc" in result:
+            doc = result["doc"]
+            if "type" in doc:
+                if doc["type"] == 'data_record':
+                    batch_info.received_forms = batch_info.received_forms + 1
+                    data_record = CouchdbDoc(data_record_schema_service, pub_sub_service, flattening_service)
+                    if data_record.is_valid_doc(doc):
+                        batch_info.validated_forms = batch_info.validated_forms + 1
+                        pub_sub_topic = pub_sub_service.get_topic_from_data(doc)
+                        if pub_sub_topic != '':
+                            form_to_send = doc
+                            if Config.flattening:
+                                flat_data_record = data_record.flatten(doc)
+                                if flat_data_record is not None and flat_data_record != {}:
+                                    batch_info.flatten_forms = batch_info.flatten_forms + 1
+                                    form_to_send = flat_data_record
+                            message_id = data_record.dispatch_to_pub_sub(pub_sub_topic, form_to_send)
+                    else:
+                        batch_info.malformed_forms = batch_info.malformed_forms + 1
+                if doc["type"] == 'person':
+                    person = CouchdbDoc(person_schema_service, pub_sub_service)
+                    if person.is_valid_doc(doc):
+                        person.dispatch_to_pub_sub('mali-prod-persons', doc)
+                if "contact_type" in doc and doc["type"] == "contact":
+                    place = CouchdbDoc(place_schema_service, pub_sub_service)
+                    if place.is_valid_doc(doc):
+                        place.dispatch_to_pub_sub('mali-prod-places', doc)
 
-        batch_info.end_seq = data.last_sequence_number
-        batch_info.end_at = datetime.now()
-        if not stat_service.verify_connexion():
-            stat_service.db = connect_to_cloud_server(client)
-            config_service.db = stat_service.db
-        print("publishing batch stats")
-        stat_service.publish_batch_stat(batch_info)
-        print("batch stats published :=)")
-        Config.last_couchdb_sequence = data.last_sequence_number
-        print(f"publishing last seq {data.last_sequence_number}")
-        config_service.store_sequence()
-        print("last seq published :=)")
+    batch_info.end_seq = data.last_sequence_number
+    batch_info.end_at = datetime.now()
+    if not stat_service.verify_connexion():
+        stat_service.db = connect_to_cloud_server(client)
+        config_service.db = stat_service.db
+    print("publishing batch stats")
+    stat_service.publish_batch_stat(batch_info)
+    print("batch stats published :=)")
+    Config.last_couchdb_sequence = data.last_sequence_number
+    print(f"publishing last seq {data.last_sequence_number}")
+    config_service.store_sequence()
+    print("last seq published :=)")
 
-        # init next batch
-        couchdb_request = CouchdbRequest()
-        time.sleep(Config.sleep_seconds)
+    # init next batch
+    couchdb_request = CouchdbRequest()
+    time.sleep(Config.sleep_seconds)
 
     return 'ok'
 

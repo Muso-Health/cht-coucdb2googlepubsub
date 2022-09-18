@@ -13,7 +13,7 @@ class CloudConfig(Base):
     __tablename__ = 'configs'
     id = Column(Integer, primary_key=True)
 
-    flattening = Column(Boolean, nullable=False, default=True)
+    flattening = Column(Boolean, nullable=False, default=False)
     url = Column(String)
     domain = Column(String)
     protocol = Column(String)
@@ -24,6 +24,7 @@ class CloudConfig(Base):
     couchdb_password_secret = Column(String)
     instance_type = Column(String)
     country_code = Column(String)
+    old_accepted = Column(Boolean, nullable=False, default=False)
 
     def __init__(self,
                  flattening: bool,
@@ -37,6 +38,7 @@ class CloudConfig(Base):
                  couchdb_password_secret: str,
                  instance_type: str,
                  country_code: str,
+                 old_accepted: bool,
                  *args: Any, **kwargs: Any
                  ):
         super().__init__(*args, **kwargs)
@@ -51,3 +53,4 @@ class CloudConfig(Base):
         self.couchdb_password_secret = couchdb_password_secret,
         self.instance_type = instance_type,
         self.country_code = country_code
+        self.old_accepted = old_accepted

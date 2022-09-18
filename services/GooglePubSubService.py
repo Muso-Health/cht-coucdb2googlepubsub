@@ -1,9 +1,11 @@
 import json
+import time
 from datetime import datetime
 
 from google.cloud import pubsub_v1
 
 from contracts.PubSubService import PubSubService
+from models.config.Config import Config
 
 
 class GooglePubSubService(PubSubService):
@@ -25,11 +27,17 @@ class GooglePubSubService(PubSubService):
             reported = datetime.fromtimestamp(json_dict['reported_date']/1000.0)
             year = reported.year
             current_year = datetime.now().year
-            if year > current_year:
+            if Config.old_accepted:
+                if year > current_year:
+                    return ''
+                if year < 2017:
+                    return 'mali-prod-data-records-2016'
+                return f"mali-prod-data-records-{year}"
+            elif round(time.time() * 1000) - json_dict['reported_date'] < 6 * 30 * 24 * 3600 * 1000:
+                return f"mali-prod-data-records-{year}"
+            else:
                 return ''
-            if year < 2017:
-                return 'mali-prod-data-records-2016'
-            return f"mali-prod-data-records-{year}"
+
         except:
             return ''
 
