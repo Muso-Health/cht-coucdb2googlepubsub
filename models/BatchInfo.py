@@ -15,6 +15,7 @@ class BatchInfo:
                  validated_persons: int = 0,
                  validated_places: int = 0,
                  validated_tasks: int = 0,
+                 validated_form_def: int = 0,
                  start_seq: str = None,
                  end_seq: str = None,
                  instance: str = 'mali-prod'
@@ -31,6 +32,7 @@ class BatchInfo:
         self.validated_persons = validated_persons
         self.validated_places = validated_places
         self.validated_tasks = validated_tasks
+        self.validated_form_def = validated_form_def
         self.start_seq = start_seq
         self.end_seq = end_seq
         self.instance = instance

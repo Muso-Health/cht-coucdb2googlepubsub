@@ -7,6 +7,7 @@ from flask import Flask, abort
 from models.config import Config as ConfigModule
 from models.config.Config import Config
 from services.DataRecordFlatteningService import DataRecordFlatteningService
+from services.FormMarshMallowService import FormMarshMallowService
 from services.PersonMarshMallowService import PersonMarshMallowService
 from services.PlaceMarshMallowService import PlaceMarshMallowService
 from services.TaskMarshMallowService import TaskMarshMallowService
@@ -45,6 +46,7 @@ def start_loop():
     person_schema_service = PersonMarshMallowService()
     place_schema_service = PlaceMarshMallowService()
     task_schema_service = TaskMarshMallowService()
+    form_def_schema_service = FormMarshMallowService()
 
     couchdb_request = CouchdbRequest()
 
@@ -97,7 +99,12 @@ def start_loop():
                         batch_info.validated_tasks = batch_info.validated_tasks + 1
                         task_pub_sub_topic = pub_sub_service.get_task_topic(doc)
                         if task_pub_sub_topic != '':
-                            task.dispatch_to_pub_sub('task_pub_sub_topic', doc)
+                            task.dispatch_to_pub_sub(task_pub_sub_topic, doc)
+                if doc["type"] == 'form':
+                    form = CouchdbDoc(form_def_schema_service, pub_sub_service)
+                    if form.is_valid_doc(doc):
+                        batch_info.validated_form_def = batch_info.validated_form_def + 1
+                        form.dispatch_to_pub_sub('mali-prod-forms', doc)
 
     batch_info.end_seq = data.last_sequence_number
     batch_info.end_at = datetime.now()

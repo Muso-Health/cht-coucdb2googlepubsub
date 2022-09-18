@@ -23,6 +23,7 @@ class CloudSqlStatService(StatService):
                 validated_forms=info.validated_forms,
                 validated_persons=info.validated_persons,
                 validated_places=info.validated_places,
+                validated_form_def=info.validated_form_def,
                 validated_tasks=info.validated_tasks,
                 malformed_forms=info.malformed_forms,
                 flatten_forms=info.flatten_forms,
