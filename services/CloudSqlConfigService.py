@@ -43,3 +43,5 @@ class CloudSqlConfigService(ConfigService):
                 where(CloudConfig.id == 1).
                 values(last_couchdb_sequence=Config.last_couchdb_sequence)
             )
+            session.commit()
+
