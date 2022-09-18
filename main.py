@@ -9,6 +9,7 @@ from models.config.Config import Config
 from services.DataRecordFlatteningService import DataRecordFlatteningService
 from services.PersonMarshMallowService import PersonMarshMallowService
 from services.PlaceMarshMallowService import PlaceMarshMallowService
+from services.TaskMarshMallowService import TaskMarshMallowService
 from services.cloud_sql.CloudSql import connect_to_cloud_server
 from models.BatchInfo import BatchInfo
 from models.couchdb_doc.CouchdbDoc import CouchdbDoc
@@ -43,6 +44,7 @@ def start_loop():
     flattening_service = DataRecordFlatteningService()
     person_schema_service = PersonMarshMallowService()
     place_schema_service = PlaceMarshMallowService()
+    task_schema_service = TaskMarshMallowService()
 
     couchdb_request = CouchdbRequest()
 
@@ -82,11 +84,20 @@ def start_loop():
                 if doc["type"] == 'person':
                     person = CouchdbDoc(person_schema_service, pub_sub_service)
                     if person.is_valid_doc(doc):
+                        batch_info.validated_persons = batch_info.validated_persons + 1
                         person.dispatch_to_pub_sub('mali-prod-persons', doc)
                 if "contact_type" in doc and doc["type"] == "contact":
                     place = CouchdbDoc(place_schema_service, pub_sub_service)
                     if place.is_valid_doc(doc):
+                        batch_info.validated_places = batch_info.validated_places + 1
                         place.dispatch_to_pub_sub('mali-prod-places', doc)
+                if doc["type"] == 'task':
+                    task = CouchdbDoc(task_schema_service, pub_sub_service)
+                    if task.is_valid_doc(doc):
+                        batch_info.validated_tasks = batch_info.validated_tasks + 1
+                        task_pub_sub_topic = pub_sub_service.get_task_topic(doc)
+                        if task_pub_sub_topic != '':
+                            task.dispatch_to_pub_sub('task_pub_sub_topic', doc)
 
     batch_info.end_seq = data.last_sequence_number
     batch_info.end_at = datetime.now()

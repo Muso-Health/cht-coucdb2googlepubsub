@@ -21,6 +21,9 @@ class BatchStat(Base):
     received = Column(Integer)
     received_forms = Column(Integer)
     validated_forms = Column(Integer)
+    validated_persons = Column(Integer)
+    validated_places = Column(Integer)
+    validated_tasks = Column(Integer)
     malformed_forms = Column(Integer)
     flatten_forms = Column(Integer)
     pending = Column(Integer)
@@ -35,6 +38,9 @@ class BatchStat(Base):
                  received: int,
                  received_forms: int,
                  validated_forms: int,
+                 validated_persons: int,
+                 validated_places: int,
+                 validated_tasks: int,
                  malformed_forms: int,
                  flatten_forms: int,
                  pending: int,
@@ -50,6 +56,9 @@ class BatchStat(Base):
         self.received = received
         self.received_forms = received_forms
         self.validated_forms = validated_forms
+        self.validated_persons = validated_persons
+        self.validated_places = validated_places
+        self.validated_tasks = validated_tasks
         self.malformed_forms = malformed_forms
         self.flatten_forms = flatten_forms
         self.pending = pending

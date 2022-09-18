@@ -41,4 +41,6 @@ class GooglePubSubService(PubSubService):
         except:
             return ''
 
-
+    def get_task_topic(self, json_dict: dict) -> str:
+        current_year = datetime.now().year
+        return f"mali-prod-data-tasks-{current_year}"

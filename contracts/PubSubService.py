@@ -7,3 +7,6 @@ class PubSubService(ABC):
 
     def get_topic_from_data(self, json_dict: dict) -> str:
         pass
+
+    def get_task_topic(self, json_dict: dict) -> str:
+        pass
